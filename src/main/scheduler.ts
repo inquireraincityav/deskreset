@@ -95,7 +95,17 @@ export class Scheduler extends EventEmitter {
       .map((k) => ({ kind: k, at: this.nextAt[k] }))
       .sort((a, b) => a.at - b.at);
     const visible = entries.filter((e) => e.kind !== 'water');
-    return { next: visible[0] ?? entries[0], following: visible[1] ?? entries[1] ?? entries[0] };
+    const next = visible[0] ?? entries[0];
+    let following = visible[1] ?? entries[1] ?? entries[0];
+    // The "following" slot is only ever an upcoming break. If its
+    // stored nextAt is in the past (e.g. the scheduler was suppressed
+    // while another break ran long), project it forward so the UI
+    // doesn't show a time that already passed.
+    const now = Date.now();
+    if (following.at <= now) {
+      following = { kind: following.kind, at: now + this.settings.intervals[following.kind] * 60_000 };
+    }
+    return { next, following };
   }
 
   private withinWorkingHours(now = new Date()): boolean {

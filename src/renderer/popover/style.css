@@ -134,11 +134,24 @@ html, body {
   background: var(--accent);
   color: #fff;
 }
+.btn-lg {
+  min-height: 56px;
+  font-size: 18px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(107, 70, 229, 0.35);
+}
 .btn-glass { background: rgba(255, 255, 255, 0.45); }
 .btn-ghost {
   background: rgba(255, 255, 255, 0.3);
   min-height: 44px;
   font-size: 15px;
   flex: 1;
+}
+.btn-icon {
+  background: rgba(255, 255, 255, 0.3);
+  width: 44px;
+  min-height: 44px;
+  padding: 0;
+  flex: 0 0 44px;
 }
 .row { display: flex; gap: 8px; }

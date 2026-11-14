@@ -64,6 +64,8 @@ async function init(): Promise<void> {
 init();
 
 document.getElementById('take-sip')!.addEventListener('click', () => desk.openSip());
+// Keep the title tooltip accurate even if we add a count later.
+document.getElementById('take-sip')!.setAttribute('title', 'Take a sip');
 document.getElementById('start-now')!.addEventListener('click', () => desk.startNow());
 document.getElementById('pause')!.addEventListener('click', () => desk.pause1h());
 document.getElementById('settings')!.addEventListener('click', () => desk.openSettings());

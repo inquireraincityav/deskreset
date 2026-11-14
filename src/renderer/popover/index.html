@@ -34,14 +34,12 @@
     </div>
 
     <div class="actions">
-      <button id="start-now" class="btn btn-primary">Start a break now</button>
-      <button id="take-sip" class="btn btn-glass">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>
-        Take a sip
-      </button>
+      <button id="start-now" class="btn btn-primary btn-lg">Start a break now</button>
       <div class="row">
         <button id="pause" class="btn btn-ghost">Pause 1 hour</button>
-<!-- label is toggled between "Pause 1 hour" and "Resume" in main.ts -->
+        <button id="take-sip" class="btn btn-icon" aria-label="Take a sip" title="Take a sip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>
+        </button>
         <button id="settings" class="btn btn-ghost">Settings</button>
       </div>
     </div>
