@@ -4,7 +4,7 @@
   --subtle: #5B4F86;
   --accent: #6B46E5;
   --accent-text: #4F2FC4;
-  --frost: rgba(243, 238, 255, 0.74);
+  --frost: rgba(240, 232, 255, 0.86);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
   color: var(--ink);
 }
@@ -23,10 +23,13 @@ html, body {
   position: fixed;
   inset: 0;
   background: var(--frost);
-  backdrop-filter: blur(40px) saturate(1.1);
-  -webkit-backdrop-filter: blur(40px) saturate(1.1);
+  backdrop-filter: blur(60px) saturate(1.2);
+  -webkit-backdrop-filter: blur(60px) saturate(1.2);
   pointer-events: none;
+  z-index: 1;
 }
+
+header, #groups, main, footer { z-index: 2; }
 
 header {
   position: fixed;

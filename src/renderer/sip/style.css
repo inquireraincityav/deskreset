@@ -12,10 +12,11 @@
 
 html, body {
   margin: 0; padding: 0; height: 100vh;
-  background: linear-gradient(160deg, #F3EEFF 0%, #E7DFFF 100%);
+  background: #F0E8FF;
   overflow: hidden;
   user-select: none;
 }
+.eyebrow, #close, main, footer { position: relative; z-index: 2; }
 
 .eyebrow {
   position: fixed; top: 24px; left: 32px;

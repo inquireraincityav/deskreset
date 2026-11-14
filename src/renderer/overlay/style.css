@@ -5,7 +5,7 @@
   --accent: #6B46E5;
   --accent-text: #4F2FC4;
   --accent-large: #5B36D6;
-  --frost: rgba(243, 238, 255, 0.72);
+  --frost: rgba(240, 232, 255, 0.86);
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.95);
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
@@ -30,10 +30,13 @@ html, body {
   position: fixed;
   inset: 0;
   background: var(--frost);
-  backdrop-filter: blur(40px) saturate(1.1);
-  -webkit-backdrop-filter: blur(40px) saturate(1.1);
+  backdrop-filter: blur(60px) saturate(1.2);
+  -webkit-backdrop-filter: blur(60px) saturate(1.2);
   pointer-events: none;
+  z-index: 1;
 }
+
+main, footer, header, #clock-chip, #groups { z-index: 2; }
 
 #clock-chip {
   position: fixed;

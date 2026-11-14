@@ -22,15 +22,38 @@ html, body {
 }
 
 .card {
+  position: relative;
   margin: 10px;
   padding: 20px;
   border-radius: 26px;
-  background: rgba(246, 242, 255, 0.92);
+  background: rgba(244, 238, 255, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 20px 50px rgba(40, 20, 110, 0.28);
   display: flex;
   flex-direction: column;
   gap: 18px;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 40% at 20% 20%, rgba(200, 179, 255, 0.55), transparent 70%),
+    radial-gradient(40% 40% at 80% 70%, rgba(227, 200, 255, 0.55), transparent 70%),
+    radial-gradient(40% 40% at 50% 100%, rgba(175, 192, 255, 0.4), transparent 70%);
+  filter: blur(20px);
+  animation: popover-aurora 24s ease-in-out infinite alternate;
+}
+.card > * { position: relative; z-index: 1; }
+@keyframes popover-aurora {
+  0%   { transform: translate(0, 0) scale(1); }
+  100% { transform: translate(5%, 4%) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card::before { animation: none; }
 }
 
 .eyebrow {
