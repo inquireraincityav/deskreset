@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; img-src data:;">
+  <title>Desk Reset — break</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="frost"></div>
+
+  <div id="clock-chip">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+    <span id="clock">—</span>
+  </div>
+
+  <main>
+    <div id="eyebrow" class="d">Break</div>
+    <h1 id="title" class="d">—</h1>
+    <p id="body">—</p>
+    <div class="rule"></div>
+    <div id="countdown" class="d">00:00</div>
+    <div class="bar"><div id="bar-fill"></div></div>
+  </main>
+
+  <footer>
+    <div class="buttons">
+      <button id="skip" class="btn btn-glass" aria-label="Hold to skip">
+        <span id="skip-fill"></span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l6 6-6 6"/><path d="M13 6l6 6-6 6"/></svg>
+        <span id="skip-label">Hold to skip</span>
+      </button>
+      <button id="lock" class="btn btn-glass">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+        Lock screen
+      </button>
+    </div>
+    <div id="hint">Press <span class="kbd d">Esc</span> twice to snooze 5 min · hold <span class="kbd d">Esc</span> 5s to override</div>
+  </footer>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+:root {
+  --ink: #261852;
+  --body: #43367A;
+  --subtle: #5B4F86;
+  --accent: #6B46E5;
+  --accent-text: #4F2FC4;
+  --accent-large: #5B36D6;
+  --frost: rgba(243, 238, 255, 0.72);
+  --glass: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.95);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', system-ui, sans-serif;
+  color: var(--ink);
+}
+
+.d {
+  font-family: ui-rounded, 'SF Pro Rounded', -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+#frost {
+  position: fixed;
+  inset: 0;
+  background: var(--frost);
+  backdrop-filter: blur(40px) saturate(1.1);
+  -webkit-backdrop-filter: blur(40px) saturate(1.1);
+  pointer-events: none;
+}
+
+#clock-chip {
+  position: fixed;
+  top: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid var(--glass-border);
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-family: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
+}
+
+main {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 22px;
+  padding-bottom: 40px;
+}
+
+#eyebrow {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+h1 {
+  margin: 0;
+  font-size: 92px;
+  line-height: 1.03;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+main p {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.45;
+  color: var(--body);
+  max-width: 640px;
+}
+
+.rule {
+  width: 120px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(79, 47, 196, 0.3);
+  margin: 10px 0 4px;
+}
+
+#countdown {
+  font-size: 80px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-large);
+  letter-spacing: 0.01em;
+}
+
+.bar {
+  width: 420px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(38, 24, 82, 0.14);
+  overflow: hidden;
+}
+
+#bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s linear;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.buttons {
+  display: flex;
+  gap: 14px;
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  font-size: 18px;
+  font-weight: 600;
+  font-family: ui-rounded, 'SF Pro Rounded', -apple-system, system-ui, sans-serif;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.btn-glass {
+  background: var(--glass);
+}
+
+.btn[hidden] { display: none; }
+
+#skip-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: rgba(107, 70, 229, 0.25);
+  transition: width 60ms linear;
+}
+
+.btn > :not(#skip-fill) {
+  position: relative;
+}
+
+#hint {
+  font-size: 16px;
+  color: var(--body);
+  text-align: center;
+  line-height: 1.6;
+}
+
+.kbd {
+  padding: 2px 9px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(79, 47, 196, 0.3);
+  font-weight: 600;
+  color: var(--ink);
+}

@@ -1,0 +1,56 @@
+# electron-builder config.
+# Goal: produce a single draggable file suitable for USB or AirDrop.
+#   - macOS: .dmg (double-click, drag to Applications) and a zipped .app for pure drag-and-drop.
+#   - Windows: a portable .exe (no installer) and an NSIS installer.
+appId: com.deskreset.app
+productName: Desk Reset
+copyright: Copyright © 2026 Desk Reset
+directories:
+  buildResources: build
+  output: release
+
+files:
+  - "out/**/*"
+  - "package.json"
+  - "!**/*.map"
+
+# macOS
+mac:
+  category: public.app-category.healthcare-fitness
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  hardenedRuntime: true
+  gatekeeperAssess: false
+  # Signing + notarization is added in Phase 4. Until then the user right-clicks → Open the first time.
+  identity: null
+  extendInfo:
+    LSUIElement: 1 # menu-bar-only app; no Dock icon
+
+dmg:
+  title: "Desk Reset ${version}"
+  contents:
+    - x: 140
+      y: 180
+    - x: 400
+      y: 180
+      type: link
+      path: /Applications
+
+# Windows
+win:
+  target:
+    - target: portable
+      arch: [x64]
+    - target: nsis
+      arch: [x64]
+
+portable:
+  artifactName: "DeskReset-${version}-portable.exe"
+
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false

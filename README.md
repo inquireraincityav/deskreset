@@ -26,6 +26,42 @@ Design phase. The screens are designed. The app is not built yet.
 | `design/canvas/` | The screen designs (`*.dc.html`) and their layout (`canvas.json`). |
 | `design/3d-prototype/` | A Three.js prototype of the 3D character and sip scene. Reference only. |
 
+## Running the app (dev)
+
+Requires Node 20+. On macOS for the full behaviour.
+
+```bash
+npm install
+npm run dev
+```
+
+The app runs as a menu-bar icon (no Dock icon). Click it for the popover.
+
+## Packaging a shareable file
+
+For USB or AirDrop handoff, package a standalone build. Signing and
+notarization are Phase 4 — until they are set up, the recipient will
+right-click → Open the first time to bypass Gatekeeper.
+
+```bash
+# Apple Silicon Mac (recommended for personal share)
+npm run pack:mac-arm
+
+# Universal (Intel + Apple Silicon)
+npm run pack:mac
+
+# Windows portable .exe + installer
+npm run pack:win
+```
+
+Output lands in `release/`:
+
+- `Desk Reset-<ver>-arm64.dmg` — double-click, drag to Applications. Good for AirDrop.
+- `Desk Reset-<ver>-arm64-mac.zip` — the raw `.app` bundle zipped. Unzip and drop in Applications. Smallest handoff.
+- `DeskReset-<ver>-portable.exe` — Windows single-file portable.
+
+Either Mac file copies to a USB stick or AirDrops without an installer.
+
 ## Starting the build
 
 Open this repo in Claude Code and say:
