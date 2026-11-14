@@ -28,8 +28,23 @@ export class Store {
       const raw = await fs.readFile(path, 'utf8');
       const parsed = JSON.parse(raw) as Partial<StoreShape>;
       data = {
-        settings: { ...DEFAULT_SETTINGS, ...(parsed.settings ?? {}) },
-        days: parsed.days ?? {},
+        settings: {
+          ...DEFAULT_SETTINGS,
+          ...(parsed.settings ?? {}),
+          // Deep-merge nested records so new keys (e.g. water) added in
+          // later versions don't read as undefined on existing installs.
+          intervals: { ...DEFAULT_SETTINGS.intervals, ...(parsed.settings?.intervals ?? {}) },
+          lengths:   { ...DEFAULT_SETTINGS.lengths,   ...(parsed.settings?.lengths ?? {}) },
+          workingHours: { ...DEFAULT_SETTINGS.workingHours, ...(parsed.settings?.workingHours ?? {}) }
+        },
+        days: Object.fromEntries(
+          Object.entries(parsed.days ?? {}).map(([date, d]) => [date, {
+            ...emptyCounts(date),
+            ...d,
+            breaksTaken:   { ...emptyCounts(date).breaksTaken,   ...(d?.breaksTaken   ?? {}) },
+            breaksSkipped: { ...emptyCounts(date).breaksSkipped, ...(d?.breaksSkipped ?? {}) }
+          }])
+        ),
         overrides: parsed.overrides ?? []
       };
     } catch {
