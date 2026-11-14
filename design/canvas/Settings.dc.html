@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings: break enforcement</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif}
+h1,button,.d{font-family:ui-rounded,'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif}
+button{cursor:pointer}
+</style>
+</helmet>
+<div style="position:relative;width:1000px;height:700px;overflow:hidden;box-sizing:border-box;padding:40px;color:#261852;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif;background:linear-gradient(160deg,#E7DFFF,#D4DDF7)">
+<div style="display:flex;width:920px;height:620px;border-radius:26px;overflow:hidden;background:#FFFFFF;border:1px solid rgba(79,47,196,0.14);box-shadow:0 28px 70px rgba(60,35,150,0.25)">
+
+<div style="width:210px;flex:none;box-sizing:border-box;padding:18px 14px;background:#F6F3FF;border-right:1px solid rgba(79,47,196,0.1);display:flex;flex-direction:column;gap:4px">
+<div style="display:flex;gap:8px;padding:0 6px 16px">
+<span style="width:12px;height:12px;border-radius:50%;background:#EC6A5E"></span>
+<span style="width:12px;height:12px;border-radius:50%;background:#F4BF4F"></span>
+<span style="width:12px;height:12px;border-radius:50%;background:#61C554"></span>
+</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">General</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:600;background:#E6DEFF;color:#3B24A0">Breaks</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">Stretches</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">Water</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">Smart pause</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">Working hours</div>
+<div class="d" style="padding:10px 14px;border-radius:14px;font-size:16px;font-weight:500;color:#43367A">Privacy</div>
+</div>
+
+<div style="flex:1;box-sizing:border-box;padding:28px 32px;display:flex;flex-direction:column;gap:20px;overflow:hidden">
+<div>
+<h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-0.02em;color:#261852">Break enforcement</h1>
+<p style="margin:6px 0 0;font-size:15px;line-height:1.5;color:#5B4F86">How firmly a break takes over your screen. You can always override, in every mode.</p>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+<div style="box-sizing:border-box;padding:16px;border-radius:20px;border:1px solid rgba(79,47,196,0.2);display:flex;flex-direction:column;gap:8px">
+<div class="d" style="font-size:19px;font-weight:600">Gentle</div>
+<div style="font-size:14px;line-height:1.45;color:#5B4F86;min-height:60px">Skip any time with one click. Good while you build the habit.</div>
+<div class="d" style="height:42px;border-radius:999px;background:#F1EEFA;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#43367A">Skip</div>
+</div>
+<div style="position:relative;box-sizing:border-box;padding:16px;border-radius:20px;border:2px solid #6B46E5;background:#F3EEFF;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<div class="d" style="font-size:19px;font-weight:600">Firm</div>
+<span class="d" style="font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:#6B46E5;color:#FFFFFF">Default</span>
+</div>
+<div style="font-size:14px;line-height:1.45;color:#43367A;min-height:60px">Hold to skip for 3 seconds. A limited number of skips per day.</div>
+<div class="d" style="position:relative;overflow:hidden;height:42px;border-radius:999px;background:#DCD1FF;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#3B24A0">
+<span style="position:absolute;left:0;top:0;bottom:0;width:40%;background:#BBA6FF"></span>
+<span style="position:relative">Hold to skip</span>
+</div>
+</div>
+<div style="box-sizing:border-box;padding:16px;border-radius:20px;border:1px solid rgba(79,47,196,0.2);display:flex;flex-direction:column;gap:8px">
+<div class="d" style="font-size:19px;font-weight:600">Strict</div>
+<div style="font-size:14px;line-height:1.45;color:#5B4F86;min-height:60px">No skip button. Only the emergency override gets you out.</div>
+<div class="d" style="height:42px;border-radius:999px;background:#F1EEFA;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#5B4F86">No skipping</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;border:1px solid rgba(79,47,196,0.14);border-radius:20px">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(79,47,196,0.1)">
+<div><div class="d" style="font-size:16px;font-weight:600">Skips allowed per day</div><div style="font-size:13px;color:#5B4F86;margin-top:2px">Used in Firm mode</div></div>
+<div style="display:flex;align-items:center;gap:12px">
+<button aria-label="Fewer skips" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(79,47,196,0.25);background:#FFFFFF;font-size:18px;font-weight:600;color:#261852">−</button>
+<span class="d" style="min-width:20px;text-align:center;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums">2</span>
+<button aria-label="More skips" style="width:38px;height:38px;border-radius:50%;border:1px solid rgba(79,47,196,0.25);background:#FFFFFF;font-size:18px;font-weight:600;color:#261852">+</button>
+</div>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid rgba(79,47,196,0.1)">
+<div><div class="d" style="font-size:16px;font-weight:600">Emergency override</div><div style="font-size:13px;color:#5B4F86;margin-top:2px">Hold Esc for 5 seconds on any break screen. Works in every mode and is logged.</div></div>
+<span class="d" style="font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px;background:#F1EEFA;color:#43367A;white-space:nowrap">Always on</span>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px">
+<div><div class="d" style="font-size:16px;font-weight:600">Lock my Mac when a break starts</div><div style="font-size:13px;color:#5B4F86;margin-top:2px">Needs your password to come back. Off by default.</div></div>
+<button role="switch" aria-checked="false" aria-label="Lock my Mac when a break starts" style="position:relative;width:50px;height:30px;border-radius:999px;border:none;background:#BFB6DD;padding:0">
+<span style="position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#FFFFFF"></span>
+</button>
+</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:10px;font-size:14px;color:#43367A">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B46E5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg>
+Everything stays on this Mac. No account, no tracking.
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":700}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Menu bar and nudge</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif}
+h1,button,.d{font-family:ui-rounded,'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif}
+button{cursor:pointer}
+</style>
+</helmet>
+<div style="position:relative;width:1000px;height:700px;overflow:hidden;color:#261852;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif;background:radial-gradient(700px 500px at 15% 90%,#8a6fe0 0%,transparent 60%),radial-gradient(800px 600px at 90% 20%,#6fa0ec 0%,transparent 60%),linear-gradient(160deg,#6a55c8,#4a6fc4 50%,#3a4f9e)">
+
+<div style="position:absolute;top:0;left:0;right:0;height:34px;background:rgba(243,238,255,0.55);border-bottom:1px solid rgba(255,255,255,0.5);display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:14px;font-weight:600;box-sizing:border-box;color:#261852">
+<div style="display:flex;gap:22px">
+<span style="font-weight:700">Desktop</span><span>File</span><span>Edit</span><span>View</span><span>Window</span>
+</div>
+<div style="display:flex;align-items:center;gap:16px">
+<div class="d" style="display:flex;align-items:center;gap:6px;padding:3px 10px;border-radius:8px;background:rgba(107,70,229,0.2);font-weight:600;font-variant-numeric:tabular-nums;color:#261852">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+14m
+</div>
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#261852" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 9a15 15 0 0120 0"/><path d="M5.5 12.5a10 10 0 0113 0"/><path d="M9 16a5 5 0 016 0"/><circle cx="12" cy="19" r="1"/></svg>
+<span style="font-variant-numeric:tabular-nums">Fri 5:40 PM</span>
+</div>
+</div>
+
+<div style="position:absolute;left:56px;top:96px;width:460px;box-sizing:border-box;padding:20px 22px;border-radius:26px;background:rgba(246,242,255,0.88);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 50px rgba(40,20,110,0.28);display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:16px">
+<div style="width:58px;height:58px;border-radius:50%;background:linear-gradient(140deg,#9B7BFF,#6B46E5);display:flex;align-items:center;justify-content:center">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+</div>
+<div>
+<div class="d" style="font-size:36px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1">00:10</div>
+<div style="font-size:16px;color:#43367A;margin-top:2px">Almost time. Your eyes will appreciate this.</div>
+</div>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<button style="min-height:44px;padding:0 20px;border-radius:999px;background:#6B46E5;border:none;color:#FFFFFF;font-size:15px;font-weight:600">Start this break now</button>
+<button style="min-height:44px;padding:0 18px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:15px;font-weight:600">+1m</button>
+<button style="min-height:44px;padding:0 18px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:15px;font-weight:600">+5m</button>
+<button style="min-height:44px;padding:0 18px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:15px;font-weight:600">+15m</button>
+</div>
+<div style="font-size:14px;color:#5B4F86">3 snoozes left today</div>
+</div>
+
+<div style="position:absolute;right:20px;top:44px;width:340px;box-sizing:border-box;padding:20px;border-radius:26px;background:rgba(246,242,255,0.92);border:1px solid rgba(255,255,255,0.95);box-shadow:0 20px 50px rgba(40,20,110,0.28);display:flex;flex-direction:column;gap:18px">
+<div>
+<div class="d" style="font-size:14px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#4F2FC4">Next break</div>
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:6px">
+<span class="d" style="font-size:52px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1">14:20</span>
+<span style="font-size:16px;color:#43367A">Eye break</span>
+</div>
+<div style="font-size:15px;color:#5B4F86;margin-top:6px">Stretch break at 6:10 PM</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<div style="padding:12px;border-radius:18px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.12)">
+<div class="d" style="font-size:26px;font-weight:600;font-variant-numeric:tabular-nums">5<span style="font-size:15px;font-weight:500;color:#5B4F86"> / 7</span></div>
+<div style="font-size:13px;color:#5B4F86;margin-top:2px">Breaks</div>
+</div>
+<div style="padding:12px;border-radius:18px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.12)">
+<div class="d" style="font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;color:#5B36D6">6<span style="font-size:15px;font-weight:500;color:#5B4F86"> / 10</span></div>
+<div style="font-size:13px;color:#5B4F86;margin-top:2px">Sips</div>
+</div>
+<div style="padding:12px;border-radius:18px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.12)">
+<div class="d" style="font-size:26px;font-weight:600;font-variant-numeric:tabular-nums">1</div>
+<div style="font-size:13px;color:#5B4F86;margin-top:2px">Skips</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:8px">
+<button style="min-height:48px;border-radius:999px;background:#6B46E5;border:none;color:#FFFFFF;font-size:16px;font-weight:600">Start a break now</button>
+<button style="min-height:48px;border-radius:999px;background:#FFFFFF;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>
+Take a sip
+</button>
+<div style="display:flex;gap:8px">
+<button style="flex:1;min-height:44px;border-radius:999px;background:transparent;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:15px;font-weight:600">Pause 1 hour</button>
+<button style="flex:1;min-height:44px;border-radius:999px;background:transparent;border:1px solid rgba(79,47,196,0.3);color:#261852;font-size:15px;font-weight:600">Settings</button>
+</div>
+</div>
+</div>
+
+<div style="position:absolute;left:56px;bottom:36px;font-size:15px;color:#FFFFFF;max-width:460px;line-height:1.5;font-weight:600">Left: the 10-second heads-up before a break. Right: the menu bar popover.</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":700}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

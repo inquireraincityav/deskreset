@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Take a sip</title>
+<script src="./support.js"></script>
+<script src="/_blob/aebe7fcb96f15308375509eab4a1a48e"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif}
+h1,button,.d{font-family:ui-rounded,'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:0.75}
+</style>
+</helmet>
+<div style="position:relative;width:1000px;height:700px;overflow:hidden;background:#10264f">
+<div style="position:absolute;inset:0">
+<dc-import name="BlurredDesktop" hint-size="1440px,900px"></dc-import>
+</div>
+<div style="position:absolute;inset:0;background:rgba(243,238,255,0.74);backdrop-filter:blur(40px) saturate(1.1);-webkit-backdrop-filter:blur(40px) saturate(1.1)"></div>
+
+<div style="position:relative;width:1000px;height:700px;box-sizing:border-box;padding:48px 56px;color:#261852;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif;display:flex;flex-direction:column">
+
+<div class="d" style="display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#4F2FC4">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>
+Hydration
+</div>
+
+<div style="display:flex;align-items:center;gap:44px;flex:1">
+<div style="width:520px;height:480px;flex:none;border-radius:36px;overflow:hidden;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.9);box-shadow:0 24px 60px rgba(80,50,170,0.18)">
+<canvas ref="{{canvasRef}}" width="520" height="480" style="width:520px;height:480px;display:block"></canvas>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:18px;flex:1">
+<h1 style="margin:0;font-size:64px;line-height:1.03;font-weight:600;letter-spacing:-0.025em;color:#261852">Take a sip.</h1>
+<p style="margin:0;font-size:20px;line-height:1.5;color:#43367A">A small sip every break adds up. No measuring, no math.</p>
+
+<div style="display:flex;align-items:baseline;gap:10px;margin-top:6px">
+<span class="d" style="font-size:60px;font-weight:600;font-variant-numeric:tabular-nums;color:#5B36D6">{{count}}</span>
+<span style="font-size:20px;color:#43367A">of 10 sips today</span>
+</div>
+
+<div style="display:flex;gap:8px;flex-wrap:wrap" aria-hidden="true">
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="10">
+<span style="width:18px;height:18px;border-radius:50%;background:{{d.fill}};border:2px solid #6B46E5;box-sizing:border-box"></span>
+</sc-for>
+</div>
+
+<div style="margin-top:8px">
+<button onClick="{{onSip}}" disabled="{{sipping}}" style="min-height:54px;padding:0 34px;border-radius:999px;background:#6B46E5;border:none;color:#FFFFFF;font-size:19px;font-weight:600">{{sipLabel}}</button>
+</div>
+</div>
+</div>
+
+<div style="font-size:15px;color:#43367A">Your sips are saved only on this Mac. No account, no sync.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1000,"height":700}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { count: 6, sipping: false };
+this.scene = null;
+this.canvasEl = null;
+}
+initScene() {
+if (this.scene || !this.canvasEl || !window.Pause3D) return;
+this.scene = window.Pause3D.createSip(this.canvasEl);
+}
+componentDidMount() {
+this.initScene();
+this.retry = setInterval(() => this.initScene(), 1000);
+}
+componentDidUpdate() {
+this.initScene();
+}
+componentWillUnmount() {
+clearInterval(this.retry);
+if (this.scene) this.scene.dispose();
+}
+renderVals() {
+const dots = [];
+for (let i = 0; i < 10; i++) {
+dots.push({ fill: i < this.state.count ? '#6B46E5' : 'transparent' });
+}
+return {
+count: this.state.count,
+dots,
+sipping: this.state.sipping,
+sipLabel: this.state.sipping ? 'Sipping…' : 'Take a sip',
+canvasRef: (el) => { this.canvasEl = el; },
+onSip: () => {
+if (this.state.sipping) return;
+const done = () => this.setState({ sipping: false, count: Math.min(this.state.count + 1, 10) });
+if (this.scene) {
+this.setState({ sipping: true });
+this.scene.sip(done);
+} else {
+done();
+}
+}
+};
+}
+}
+</script>
+</body>
+</html>

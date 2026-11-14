@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Stretch break</title>
+<script src="./support.js"></script>
+<script src="/_blob/aebe7fcb96f15308375509eab4a1a48e"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif}
+h1,button,.d{font-family:ui-rounded,'SF Pro Rounded',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif}
+button{cursor:pointer}
+</style>
+</helmet>
+<div style="position:relative;width:1440px;height:900px;overflow:hidden;background:#10264f">
+<div style="position:absolute;inset:0">
+<dc-import name="BlurredDesktop" hint-size="1440px,900px"></dc-import>
+</div>
+<div style="position:absolute;inset:0;background:rgba(243,238,255,0.74);backdrop-filter:blur(40px) saturate(1.1);-webkit-backdrop-filter:blur(40px) saturate(1.1)"></div>
+
+<div style="position:relative;width:1440px;height:900px;box-sizing:border-box;padding:48px 120px;color:#261852;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','SF Pro Display',system-ui,sans-serif;display:flex;flex-direction:column">
+
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div class="d" style="display:flex;align-items:center;gap:12px;font-size:16px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#4F2FC4">
+<span style="width:10px;height:10px;border-radius:50%;background:#6B46E5"></span>
+Stretch break
+</div>
+<button style="min-height:44px;padding:0 22px;border-radius:999px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.95);color:#261852;font-size:15px;font-weight:600">Hold to end break</button>
+</div>
+
+<div style="display:flex;gap:14px;margin-top:32px">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px">
+<div style="height:7px;border-radius:999px;background:{{g.bar}}"></div>
+<div class="d" style="font-size:15px;font-weight:600;color:{{g.text}}">{{g.num}} · {{g.name}}</div>
+</div>
+</sc-for>
+</div>
+
+<div style="display:flex;align-items:center;gap:72px;margin-top:40px;flex:1">
+<div style="position:relative;width:560px;height:500px;flex:none;border-radius:36px;overflow:hidden;background:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.9);box-shadow:0 24px 60px rgba(80,50,170,0.18)">
+<canvas ref="{{canvasRef}}" width="560" height="500" style="width:560px;height:500px;display:block"></canvas>
+<div style="position:absolute;left:0;right:0;bottom:18px;text-align:center;font-size:14px;color:#43367A">Follow the figure at your own pace</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:20px;flex:1">
+<div class="d" style="align-self:flex-start;padding:8px 18px;border-radius:999px;background:rgba(255,255,255,0.7);border:1px solid #6B46E5;color:#4F2FC4;font-size:16px;font-weight:600">{{side}}</div>
+<h1 style="margin:0;font-size:72px;line-height:1.03;font-weight:600;letter-spacing:-0.025em;color:#261852">{{name}}</h1>
+<p style="margin:0;font-size:24px;line-height:1.45;color:#43367A;max-width:560px;min-height:105px">{{cue}}</p>
+
+<div style="display:flex;align-items:center;gap:28px;margin-top:8px">
+<svg width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Seconds left">
+<circle cx="70" cy="70" r="54" fill="none" stroke="rgba(38,24,82,0.14)" stroke-width="10"/>
+<circle cx="70" cy="70" r="54" fill="none" stroke="#6B46E5" stroke-width="10" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="{{ringOffset}}" transform="rotate(-90 70 70)"/>
+<text x="70" y="83" text-anchor="middle" font-size="40" font-weight="600" fill="#261852" font-family="-apple-system, 'SF Pro Display', system-ui, sans-serif">{{secs}}</text>
+</svg>
+<div style="display:flex;gap:12px;align-items:center">
+<button onClick="{{onBack}}" style="min-height:50px;padding:0 24px;border-radius:999px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.95);color:#261852;font-size:17px;font-weight:600">Back</button>
+<button onClick="{{onPause}}" style="min-height:50px;padding:0 30px;border-radius:999px;background:#6B46E5;border:none;color:#FFFFFF;font-size:17px;font-weight:600">{{pauseLabel}}</button>
+<button onClick="{{onNext}}" style="min-height:50px;padding:0 24px;border-radius:999px;background:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.95);color:#261852;font-size:17px;font-weight:600">Next</button>
+</div>
+</div>
+</div>
+</div>
+
+<div style="font-size:15px;color:#43367A">Move gently and stop if anything hurts. Each hold is 20 seconds, one side at a time. The routine takes about 2½ minutes.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+constructor(props) {
+super(props);
+this.state = { phase: 0, secs: 20, paused: false };
+this.scene = null;
+this.canvasEl = null;
+this.posed = -1;
+}
+phases() {
+return [
+{ g: 0, id: 'neck', name: 'Neck tilt', side: 'Right side', s: 1, cue: 'Drop your right ear toward your right shoulder. Keep both shoulders low and relaxed.' },
+{ g: 0, id: 'neck', name: 'Neck tilt', side: 'Left side', s: -1, cue: 'Now drop your left ear toward your left shoulder. Let the weight of your head do the work.' },
+{ g: 1, id: 'shoulder', name: 'Shoulder rolls', side: 'Both shoulders', s: 1, cue: 'Lift your shoulders up, then roll them back and down in slow, big circles.' },
+{ g: 2, id: 'twist', name: 'Seated twist', side: 'Turn right', s: 1, cue: 'Sit tall, one hand on the back of your chair. Exhale and turn gently to the right.' },
+{ g: 2, id: 'twist', name: 'Seated twist', side: 'Turn left', s: -1, cue: 'Switch hands and turn gently to the left. Keep both feet flat on the floor.' },
+{ g: 3, id: 'wrist', name: 'Wrist and forearm', side: 'Right hand', s: 1, cue: 'Arm straight out, palm facing away. Use your other hand to gently draw the fingers back.' },
+{ g: 3, id: 'wrist', name: 'Wrist and forearm', side: 'Left hand', s: -1, cue: 'Switch arms. Keep the elbow straight and draw the fingers back until you feel a mild stretch.' }
+];
+}
+initScene() {
+if (this.scene || !this.canvasEl || !window.Pause3D) return;
+this.scene = window.Pause3D.createStretch(this.canvasEl);
+this.posed = -1;
+}
+applyPose() {
+if (!this.scene) return;
+const p = this.phases()[this.state.phase];
+this.scene.setPose(p.id, p.s);
+this.posed = this.state.phase;
+}
+componentDidMount() {
+this.timer = setInterval(() => this.tick(), 1000);
+this.initScene();
+this.applyPose();
+}
+componentDidUpdate() {
+this.initScene();
+if (this.scene && this.posed !== this.state.phase) this.applyPose();
+}
+componentWillUnmount() {
+clearInterval(this.timer);
+if (this.scene) this.scene.dispose();
+}
+tick() {
+if (this.state.paused) return;
+const s = this.state.secs - 1;
+if (s <= 0) {
+this.setState({ phase: (this.state.phase + 1) % 7, secs: 20 });
+} else {
+this.setState({ secs: s });
+}
+}
+renderVals() {
+const PH = this.phases();
+const p = PH[this.state.phase];
+const names = ['Neck tilt', 'Shoulder rolls', 'Seated twist', 'Wrist and forearm'];
+const groups = names.map((n, i) => ({
+num: i + 1,
+name: n,
+bar: i < p.g ? '#6B46E5' : i === p.g ? 'rgba(107,70,229,0.5)' : 'rgba(38,24,82,0.16)',
+text: i === p.g ? '#261852' : '#5B4F86'
+}));
+return {
+groups,
+name: p.name,
+side: p.side,
+cue: p.cue,
+secs: this.state.secs,
+ringOffset: 339.3 * (1 - this.state.secs / 20),
+canvasRef: (el) => { this.canvasEl = el; },
+pauseLabel: this.state.paused ? 'Resume' : 'Pause',
+onPause: () => this.setState({ paused: !this.state.paused }),
+onNext: () => this.setState({ phase: (this.state.phase + 1) % 7, secs: 20 }),
+onBack: () => this.setState({ phase: (this.state.phase + 6) % 7, secs: 20 })
+};
+}
+}
+</script>
+</body>
+</html>

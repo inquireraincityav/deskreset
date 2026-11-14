@@ -1,0 +1,10 @@
+{
+  "name": "deskreset-3d-prototype",
+  "private": true,
+  "description": "Rough Three.js prototype of the Desk Reset stretch and sip scenes. Reference only; not visually verified.",
+  "scripts": {
+    "build": "esbuild entry.js --bundle --minify --format=iife --target=es2019 --outfile=dist/pause3d.js"
+  },
+  "dependencies": { "three": "^0.187.0" },
+  "devDependencies": { "esbuild": "^0.28.2" }
+}
