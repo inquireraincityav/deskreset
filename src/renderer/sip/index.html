@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src data: blob:;">
+  <title>Desk Reset — sip</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="eyebrow d">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4F2FC4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 01-12 0c0-4.5 6-11 6-11z"/></svg>
+    Hydration
+  </div>
+  <button id="close" aria-label="Close">×</button>
+
+  <main>
+    <div class="stage">
+      <canvas id="canvas" width="440" height="400"></canvas>
+    </div>
+
+    <section>
+      <h1 class="d">Take a sip.</h1>
+      <p>A small sip every break adds up. No measuring, no math.</p>
+
+      <div class="count">
+        <span id="count" class="d accent">0</span>
+        <span>of 10 sips today</span>
+      </div>
+
+      <div id="dots" class="dots" aria-hidden="true"></div>
+
+      <button id="sip-btn" class="btn btn-primary">Take a sip</button>
+    </section>
+  </main>
+
+  <footer>Your sips are saved only on this Mac. No account, no sync.</footer>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

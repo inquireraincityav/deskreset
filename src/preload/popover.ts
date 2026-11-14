@@ -8,5 +8,7 @@ contextBridge.exposeInMainWorld('desk', {
   takeSip: () => ipcRenderer.invoke('popover:takeSip'),
   startNow: () => ipcRenderer.invoke('popover:startNow'),
   pause1h: () => ipcRenderer.invoke('popover:pause1h'),
-  updateSettings: (patch: unknown) => ipcRenderer.invoke('popover:updateSettings', patch)
+  updateSettings: (patch: unknown) => ipcRenderer.invoke('popover:updateSettings', patch),
+  openSip: () => ipcRenderer.invoke('popover:openSip'),
+  openSettings: () => ipcRenderer.invoke('popover:openSettings')
 });

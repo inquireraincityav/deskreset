@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src data:;">
+  <title>Desk Reset — Settings</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <h1 class="d">Settings</h1>
+      <button id="close" aria-label="Close">×</button>
+    </header>
+
+    <div class="content">
+
+      <section>
+        <h2 class="d">Break enforcement</h2>
+        <p class="sub">How firmly a break takes over your screen. You can always override, in every mode.</p>
+        <div class="enforce-grid">
+          <button class="enforce" data-mode="gentle">
+            <div class="d title">Gentle</div>
+            <div class="desc">Skip any time with one click. Good while you build the habit.</div>
+          </button>
+          <button class="enforce selected" data-mode="firm">
+            <div class="d title">Firm <span class="badge">Default</span></div>
+            <div class="desc">Hold to skip for 3 seconds. A limited number of skips per day.</div>
+          </button>
+          <button class="enforce" data-mode="strict">
+            <div class="d title">Strict</div>
+            <div class="desc">No skip button. Only the emergency override gets you out.</div>
+          </button>
+        </div>
+      </section>
+
+      <section class="rows">
+        <div class="row">
+          <div><div class="d title-sm">Skips allowed per day</div><div class="desc-sm">Used in Firm mode</div></div>
+          <div class="stepper">
+            <button data-step="skips" data-dir="-1">−</button>
+            <span id="skips-val" class="d">2</span>
+            <button data-step="skips" data-dir="1">+</button>
+          </div>
+        </div>
+        <div class="row">
+          <div><div class="d title-sm">Emergency override</div><div class="desc-sm">Hold Esc 5s on any break screen. Works in every mode and is logged.</div></div>
+          <span class="chip">Always on</span>
+        </div>
+        <div class="row">
+          <div><div class="d title-sm">Lock my Mac when a break starts</div><div class="desc-sm">Sleeps the display. Needs your password to come back.</div></div>
+          <button id="lock-toggle" class="switch" role="switch" aria-checked="false"><span></span></button>
+        </div>
+        <div class="row">
+          <div><div class="d title-sm">Launch at login</div><div class="desc-sm">Open Desk Reset automatically when you sign in.</div></div>
+          <button id="launch-toggle" class="switch" role="switch" aria-checked="true"><span></span></button>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="d">Intervals</h2>
+        <div class="rows">
+          <div class="row">
+            <div><div class="d title-sm">Eye break every</div><div class="desc-sm">Short look-away.</div></div>
+            <div class="stepper"><button data-step="ieye" data-dir="-5">−</button><span id="ieye-val" class="d">20</span><span class="unit">min</span><button data-step="ieye" data-dir="5">+</button></div>
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">Stretch break every</div></div>
+            <div class="stepper"><button data-step="istretch" data-dir="-15">−</button><span id="istretch-val" class="d">60</span><span class="unit">min</span><button data-step="istretch" data-dir="15">+</button></div>
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">Long break every</div></div>
+            <div class="stepper"><button data-step="ilong" data-dir="-30">−</button><span id="ilong-val" class="d">120</span><span class="unit">min</span><button data-step="ilong" data-dir="30">+</button></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="d">Working hours</h2>
+        <p class="sub">When unchecked, breaks fire all day. When checked, only between the two times.</p>
+        <div class="rows">
+          <div class="row">
+            <div><div class="d title-sm">Only during working hours</div></div>
+            <button id="wh-toggle" class="switch" role="switch" aria-checked="false"><span></span></button>
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">Start</div></div>
+            <input id="wh-start" type="time" value="09:00">
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">End</div></div>
+            <input id="wh-end" type="time" value="18:00">
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="d">Privacy</h2>
+        <p class="sub">Everything stays on this Mac. No account, no tracking.</p>
+        <div class="rows">
+          <div class="row">
+            <div><div class="d title-sm">Export my data</div><div class="desc-sm">Settings, counts and the override log, as JSON.</div></div>
+            <button id="export" class="btn btn-glass">Export JSON</button>
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">Delete all data</div><div class="desc-sm">Settings and history. Cannot be undone.</div></div>
+            <button id="delete" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

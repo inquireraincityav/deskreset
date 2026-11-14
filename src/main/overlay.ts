@@ -34,6 +34,13 @@ export class OverlayController {
 
     const displays = screen.getAllDisplays();
     for (const d of displays) {
+      // Stretch break has its own HTML + preload (bundles three.js).
+      // Eye and long break share the simpler overlay.html.
+      const useStretch = kind === 'stretch';
+      const preloadFile = useStretch ? 'stretch.js' : 'overlay.js';
+      const htmlPath = useStretch ? 'stretch/index.html' : 'overlay/index.html';
+      const htmlRoute = useStretch ? 'stretch' : 'overlay';
+
       const win = new BrowserWindow({
         x: d.bounds.x,
         y: d.bounds.y,
@@ -51,7 +58,7 @@ export class OverlayController {
         vibrancy: 'under-window', // macOS; harmless elsewhere
         backgroundMaterial: 'acrylic', // Windows 11
         webPreferences: {
-          preload: join(__dirname, '../preload/overlay.js'),
+          preload: join(__dirname, '../preload/' + preloadFile),
           contextIsolation: true,
           sandbox: true
         }
@@ -71,9 +78,9 @@ export class OverlayController {
       }));
 
       if (process.env.ELECTRON_RENDERER_URL) {
-        win.loadURL(`${process.env.ELECTRON_RENDERER_URL}/overlay/index.html#${payload}`);
+        win.loadURL(`${process.env.ELECTRON_RENDERER_URL}/${htmlRoute}/index.html#${payload}`);
       } else {
-        win.loadFile(join(__dirname, '../renderer/overlay/index.html'), { hash: payload });
+        win.loadFile(join(__dirname, '../renderer/' + htmlPath), { hash: payload });
       }
 
       this.windows.push(win);

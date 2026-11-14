@@ -7,6 +7,8 @@ interface DeskPopoverAPI {
   startNow(): Promise<void>;
   pause1h(): Promise<void>;
   updateSettings(patch: unknown): Promise<unknown>;
+  openSip(): Promise<void>;
+  openSettings(): Promise<void>;
 }
 const desk = (window as unknown as { desk: DeskPopoverAPI }).desk;
 
@@ -28,20 +30,21 @@ function render(): void {
   if (!state) return;
   const ms = Math.max(0, state.nextBreakAt - Date.now());
   const sec = Math.round(ms / 1000);
-  $nc.textContent = `${pad(Math.floor(sec / 60))}:${pad(sec % 60)}`;
-  $nk.textContent = KIND_LABEL[state.nextBreakKind];
+  $nc.textContent = state.paused ? '⏸︎' : `${pad(Math.floor(sec / 60))}:${pad(sec % 60)}`;
+  $nk.textContent = state.paused ? 'Paused' : KIND_LABEL[state.nextBreakKind];
 
   const fd = new Date(state.followingBreakAt);
   let h = fd.getHours();
   const m = fd.getMinutes();
   const ampm = h >= 12 ? 'PM' : 'AM';
   h = h % 12; if (h === 0) h = 12;
-  $follow.textContent = `${KIND_LABEL[state.followingBreakKind]} at ${h}:${pad(m)} ${ampm}`;
+  $follow.textContent = state.paused
+    ? 'Resumes when you unpause.'
+    : `${KIND_LABEL[state.followingBreakKind]} at ${h}:${pad(m)} ${ampm}`;
 
   const c = state.counts;
   const taken = c.breaksTaken.eye + c.breaksTaken.stretch + c.breaksTaken.long;
   const skipped = c.breaksSkipped.eye + c.breaksSkipped.stretch + c.breaksSkipped.long;
-  // A very rough daily goal: breaks you would get in an 8-hour day at current intervals.
   const perDay = Math.round((8 * 60) / state.settings.intervals.eye);
   $breaksN.textContent = String(taken);
   $breaksGoal.textContent = String(perDay);
@@ -57,12 +60,7 @@ async function init(): Promise<void> {
 }
 init();
 
-document.getElementById('take-sip')!.addEventListener('click', () => desk.takeSip());
+document.getElementById('take-sip')!.addEventListener('click', () => desk.openSip());
 document.getElementById('start-now')!.addEventListener('click', () => desk.startNow());
 document.getElementById('pause')!.addEventListener('click', () => desk.pause1h());
-document.getElementById('settings')!.addEventListener('click', () => {
-  // Settings UI is Phase 3. Phase 1 toggles the most useful setting inline.
-  if (!state) return;
-  const next = state.settings.enforcement === 'firm' ? 'gentle' : state.settings.enforcement === 'gentle' ? 'strict' : 'firm';
-  desk.updateSettings({ enforcement: next });
-});
+document.getElementById('settings')!.addEventListener('click', () => desk.openSettings());

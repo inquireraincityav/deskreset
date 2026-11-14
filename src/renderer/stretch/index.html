@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src data: blob:;">
+  <title>Desk Reset — stretch</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="frost"></div>
+
+  <header>
+    <div class="eyebrow d"><span class="dot"></span> Stretch break</div>
+    <button id="end" class="btn btn-glass">Hold Esc 5s to end</button>
+  </header>
+
+  <div id="groups"></div>
+
+  <main>
+    <div class="stage">
+      <canvas id="canvas" width="560" height="500"></canvas>
+      <div class="stage-caption">Follow the figure at your own pace</div>
+    </div>
+
+    <section class="info">
+      <div id="side-chip" class="d chip">—</div>
+      <h1 id="name" class="d">—</h1>
+      <p id="cue">—</p>
+
+      <div class="controls">
+        <svg id="ring" width="140" height="140" viewBox="0 0 140 140" role="img" aria-label="Seconds left">
+          <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(38,24,82,0.14)" stroke-width="10"/>
+          <circle id="ring-fill" cx="70" cy="70" r="54" fill="none" stroke="#6B46E5" stroke-width="10" stroke-linecap="round" stroke-dasharray="339.3" stroke-dashoffset="0" transform="rotate(-90 70 70)"/>
+          <text id="ring-text" x="70" y="83" text-anchor="middle" font-size="40" font-weight="600" fill="#261852">20</text>
+        </svg>
+        <div class="buttons">
+          <button id="back" class="btn btn-glass">Back</button>
+          <button id="pause" class="btn btn-primary">Pause</button>
+          <button id="next" class="btn btn-glass">Next</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="safety">Move gently and stop if anything hurts. Each hold is 20 seconds, one side at a time.</footer>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

@@ -16,7 +16,11 @@ export default defineConfig({
       rollupOptions: {
         input: {
           overlay: resolve(__dirname, 'src/preload/overlay.ts'),
-          popover: resolve(__dirname, 'src/preload/popover.ts')
+          popover: resolve(__dirname, 'src/preload/popover.ts'),
+          stretch: resolve(__dirname, 'src/preload/stretch.ts'),
+          sip: resolve(__dirname, 'src/preload/sip.ts'),
+          headsup: resolve(__dirname, 'src/preload/headsup.ts'),
+          settings: resolve(__dirname, 'src/preload/settings.ts')
         },
         output: { format: 'cjs', entryFileNames: '[name].js' }
       }
@@ -29,7 +33,11 @@ export default defineConfig({
       rollupOptions: {
         input: {
           overlay: resolve(__dirname, 'src/renderer/overlay/index.html'),
-          popover: resolve(__dirname, 'src/renderer/popover/index.html')
+          popover: resolve(__dirname, 'src/renderer/popover/index.html'),
+          stretch: resolve(__dirname, 'src/renderer/stretch/index.html'),
+          sip: resolve(__dirname, 'src/renderer/sip/index.html'),
+          headsup: resolve(__dirname, 'src/renderer/headsup/index.html'),
+          settings: resolve(__dirname, 'src/renderer/settings/index.html')
         }
       }
     }

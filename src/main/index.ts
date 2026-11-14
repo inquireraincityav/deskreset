@@ -1,13 +1,15 @@
-import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
+import { promises as fs } from 'node:fs';
+import { join } from 'node:path';
 import { Store } from './store';
 import { Scheduler } from './scheduler';
 import { OverlayController } from './overlay';
 import { TrayController } from './tray';
 import { createPopoverWindow } from './popover';
+import { createSipWindow, createSettingsWindow, createHeadsupWindow } from './windows';
 import { lockScreen } from './lock';
 import type { BreakKind, PopoverState, Settings } from '../shared/types';
 
-// Hide from Dock — menu-bar-only.
 if (process.platform === 'darwin' && app.dock) app.dock.hide();
 
 const gotLock = app.requestSingleInstanceLock();
@@ -24,10 +26,15 @@ async function main(): Promise<void> {
   const scheduler = new Scheduler(store.settings);
   const tray = new TrayController();
 
-  // Launch at login — mirrors the stored setting.
   app.setLoginItemSettings({ openAtLogin: store.settings.launchAtLogin });
 
   let popover: BrowserWindow | null = null;
+  let sipWin: BrowserWindow | null = null;
+  let settingsWin: BrowserWindow | null = null;
+  let headsupWin: BrowserWindow | null = null;
+  let paused = false;
+  let pausedUntil: number | null = null;
+
   tray.init(() => {
     popover = createPopoverWindow();
     tray.attachPopover(popover);
@@ -61,15 +68,26 @@ async function main(): Promise<void> {
   });
 
   scheduler.on('fire', (kind: BreakKind) => {
+    if (headsupWin && !headsupWin.isDestroyed()) {
+      headsupWin.destroy();
+      headsupWin = null;
+    }
     const copy = BREAK_COPY[kind];
     const length = store.settings.lengths[kind];
     if (store.settings.lockOnBreak) lockScreen();
     overlay.show(kind, copy.title, copy.body, length);
   });
 
+  scheduler.on('headsup', (kind: BreakKind, secondsUntil: number) => {
+    if (overlay.active()) return;
+    if (headsupWin && !headsupWin.isDestroyed()) headsupWin.destroy();
+    const snoozesLeft = Math.max(0, store.settings.snoozesPerDay - store.today().snoozesUsed);
+    headsupWin = createHeadsupWindow({ kind, secondsUntil, snoozesLeft });
+    headsupWin.on('closed', () => { headsupWin = null; });
+  });
+
   scheduler.start();
 
-  // Tray countdown — update every 15s.
   const refresh = (): void => {
     const { next } = scheduler.state();
     const mins = Math.max(0, Math.round((next.at - Date.now()) / 60_000));
@@ -82,12 +100,19 @@ async function main(): Promise<void> {
   // ---------------- IPC ----------------
 
   function pushPopover(): void {
-    if (popover && !popover.isDestroyed()) {
-      popover.webContents.send('popover:state', snapshotPopover());
+    const s = snapshotPopover();
+    for (const win of [popover, settingsWin, sipWin]) {
+      if (win && !win.isDestroyed()) {
+        win.webContents.send('popover:state', s);
+      }
     }
   }
 
   function snapshotPopover(): PopoverState {
+    if (paused && pausedUntil && Date.now() >= pausedUntil) {
+      paused = false;
+      pausedUntil = null;
+    }
     const { next, following } = scheduler.state();
     return {
       nextBreakAt: next.at,
@@ -96,8 +121,8 @@ async function main(): Promise<void> {
       followingBreakKind: following.kind,
       counts: store.today(),
       settings: store.settings,
-      paused: false,
-      pausedUntil: null
+      paused,
+      pausedUntil
     };
   }
 
@@ -105,13 +130,31 @@ async function main(): Promise<void> {
   ipcMain.handle('popover:takeSip', async () => (await store.bumpSip()));
   ipcMain.handle('popover:startNow', () => {
     const { next } = scheduler.state();
-    scheduler.reschedule(next.kind); // shift before showing so the fire path is clean
-    const copy = BREAK_COPY[next.kind];
-    overlay.show(next.kind, copy.title, copy.body, store.settings.lengths[next.kind]);
+    scheduler.fireNow(next.kind);
   });
   ipcMain.handle('popover:pause1h', () => {
-    scheduler.setPaused(true, Date.now() + 60 * 60_000);
+    paused = true;
+    pausedUntil = Date.now() + 60 * 60_000;
+    scheduler.setPaused(true, pausedUntil);
     pushPopover();
+  });
+  ipcMain.handle('popover:openSip', () => {
+    if (!sipWin || sipWin.isDestroyed()) {
+      sipWin = createSipWindow();
+      sipWin.on('closed', () => { sipWin = null; });
+    } else {
+      sipWin.show();
+      sipWin.focus();
+    }
+  });
+  ipcMain.handle('popover:openSettings', () => {
+    if (!settingsWin || settingsWin.isDestroyed()) {
+      settingsWin = createSettingsWindow();
+      settingsWin.on('closed', () => { settingsWin = null; });
+    } else {
+      settingsWin.show();
+      settingsWin.focus();
+    }
   });
   ipcMain.handle('popover:updateSettings', async (_e, patch: Partial<Settings>) => {
     const s = await store.updateSettings(patch);
@@ -119,6 +162,7 @@ async function main(): Promise<void> {
     if (typeof patch.launchAtLogin === 'boolean') {
       app.setLoginItemSettings({ openAtLogin: patch.launchAtLogin });
     }
+    pushPopover();
     return s;
   });
 
@@ -132,7 +176,51 @@ async function main(): Promise<void> {
     overlay.skip();
   });
   ipcMain.handle('overlay:lock', () => lockScreen());
-  ipcMain.handle('overlay:sip', async () => await store.bumpSip());
+  ipcMain.handle('overlay:sip', async () => { await store.bumpSip(); pushPopover(); });
+
+  // Sip window
+  ipcMain.handle('sip:close', () => {
+    if (sipWin && !sipWin.isDestroyed()) sipWin.close();
+  });
+
+  // Heads-up window
+  ipcMain.handle('headsup:startNow', () => {
+    const { next } = scheduler.state();
+    scheduler.fireNow(next.kind);
+    if (headsupWin && !headsupWin.isDestroyed()) headsupWin.destroy();
+  });
+  ipcMain.handle('headsup:snooze', async (_e, minutes: number) => {
+    await store.recordSnooze();
+    scheduler.snooze(minutes);
+    if (headsupWin && !headsupWin.isDestroyed()) headsupWin.destroy();
+    pushPopover();
+  });
+  ipcMain.handle('headsup:close', () => {
+    if (headsupWin && !headsupWin.isDestroyed()) headsupWin.destroy();
+  });
+
+  // Settings window: export + delete
+  ipcMain.handle('settings:exportData', async () => {
+    const parent = settingsWin ?? undefined;
+    const result = await dialog.showSaveDialog(parent!, {
+      title: 'Export Desk Reset data',
+      defaultPath: `desk-reset-export-${new Date().toISOString().slice(0, 10)}.json`,
+      filters: [{ name: 'JSON', extensions: ['json'] }]
+    });
+    if (result.canceled || !result.filePath) return;
+    const json = await store.exportJSON();
+    await fs.writeFile(result.filePath, json, 'utf8');
+    shell.showItemInFolder(result.filePath);
+  });
+  ipcMain.handle('settings:deleteAll', async () => {
+    await store.deleteAll();
+    scheduler.updateSettings(store.settings);
+    scheduler.resetAll();
+    pushPopover();
+  });
+  ipcMain.handle('settings:close', () => {
+    if (settingsWin && !settingsWin.isDestroyed()) settingsWin.close();
+  });
 
   app.on('window-all-closed', () => {
     // Keep running as a menu-bar app; do nothing.

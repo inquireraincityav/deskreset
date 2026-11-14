@@ -13,6 +13,7 @@ export class Scheduler extends EventEmitter {
   private paused = false;
   private pausedUntil: number | null = null;
   private suppressed = false; // true while a break is active
+  private headsupShownFor: { kind: BreakKind; at: number } | null = null;
 
   constructor(settings: Settings) {
     super();
@@ -50,6 +51,7 @@ export class Scheduler extends EventEmitter {
   reschedule(kind: BreakKind): void {
     this.nextAt[kind] = Date.now() + this.settings.intervals[kind] * 60_000;
     this.suppressed = false;
+    this.headsupShownFor = null;
   }
 
   snooze(minutes: number): void {
@@ -57,6 +59,14 @@ export class Scheduler extends EventEmitter {
     for (const k of ['eye', 'stretch', 'long'] as BreakKind[]) {
       this.nextAt[k] = Math.max(this.nextAt[k], Date.now() + minutes * 60_000);
     }
+    this.headsupShownFor = null;
+  }
+
+  // Force the next instance of a kind to fire right now (used by
+  // "Start a break now" in the popover and heads-up).
+  fireNow(kind: BreakKind): void {
+    this.nextAt[kind] = Date.now();
+    this.headsupShownFor = null;
   }
 
   // The user was idle long enough to count as a natural break.
@@ -106,7 +116,11 @@ export class Scheduler extends EventEmitter {
       this.suppressed = true;
       this.emit('fire', next.kind);
     } else if (next.at - now <= 10_000) {
-      this.emit('headsup', next.kind, Math.max(0, Math.ceil((next.at - now) / 1000)));
+      const already = this.headsupShownFor;
+      if (!already || already.kind !== next.kind || already.at !== next.at) {
+        this.headsupShownFor = { kind: next.kind, at: next.at };
+        this.emit('headsup', next.kind, Math.max(0, Math.ceil((next.at - now) / 1000)));
+      }
     }
   }
 }
