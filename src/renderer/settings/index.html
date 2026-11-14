@@ -5,9 +5,11 @@
   <meta http-equiv="Content-Security-Policy"
     content="default-src 'none'; style-src 'self' 'unsafe-inline'; script-src 'self'; img-src data:;">
   <title>Desk Reset — Settings</title>
+  <link rel="stylesheet" href="../_shared/aurora.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+  <div class="aurora" aria-hidden="true"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
   <div class="shell">
     <header>
       <h1 class="d">Settings</h1>
@@ -72,6 +74,10 @@
           <div class="row">
             <div><div class="d title-sm">Long break every</div></div>
             <div class="stepper"><button data-step="ilong" data-dir="-30">−</button><span id="ilong-val" class="d">120</span><span class="unit">min</span><button data-step="ilong" data-dir="30">+</button></div>
+          </div>
+          <div class="row">
+            <div><div class="d title-sm">Water reminder every</div><div class="desc-sm">Gentle: opens the sip window. No full-screen takeover.</div></div>
+            <div class="stepper"><button data-step="iwater" data-dir="-15">−</button><span id="iwater-val" class="d">45</span><span class="unit">min</span><button data-step="iwater" data-dir="15">+</button></div>
           </div>
         </div>
       </section>

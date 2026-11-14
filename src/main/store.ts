@@ -62,7 +62,7 @@ export class Store {
     return this.today();
   }
 
-  async recordBreak(kind: 'eye' | 'stretch' | 'long', outcome: 'taken' | 'skipped'): Promise<void> {
+  async recordBreak(kind: 'eye' | 'stretch' | 'long' | 'water', outcome: 'taken' | 'skipped'): Promise<void> {
     const t = this.today();
     if (outcome === 'taken') t.breaksTaken[kind] += 1;
     else t.breaksSkipped[kind] += 1;

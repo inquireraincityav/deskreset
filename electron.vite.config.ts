@@ -20,8 +20,7 @@ export default defineConfig({
           stretch: resolve(__dirname, 'src/preload/stretch.ts'),
           sip: resolve(__dirname, 'src/preload/sip.ts'),
           headsup: resolve(__dirname, 'src/preload/headsup.ts'),
-          settings: resolve(__dirname, 'src/preload/settings.ts'),
-          backdrop: resolve(__dirname, 'src/preload/backdrop.ts')
+          settings: resolve(__dirname, 'src/preload/settings.ts')
         },
         output: { format: 'cjs', entryFileNames: '[name].js' }
       }
@@ -38,8 +37,7 @@ export default defineConfig({
           stretch: resolve(__dirname, 'src/renderer/stretch/index.html'),
           sip: resolve(__dirname, 'src/renderer/sip/index.html'),
           headsup: resolve(__dirname, 'src/renderer/headsup/index.html'),
-          settings: resolve(__dirname, 'src/renderer/settings/index.html'),
-          backdrop: resolve(__dirname, 'src/renderer/backdrop/index.html')
+          settings: resolve(__dirname, 'src/renderer/settings/index.html')
         }
       }
     }

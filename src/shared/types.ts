@@ -1,10 +1,10 @@
-export type BreakKind = 'eye' | 'stretch' | 'long';
+export type BreakKind = 'eye' | 'stretch' | 'long' | 'water';
 export type EnforcementMode = 'gentle' | 'firm' | 'strict';
 
 export interface Settings {
   enforcement: EnforcementMode;
-  intervals: { eye: number; stretch: number; long: number }; // minutes
-  lengths: { eye: number; stretch: number; long: number }; // seconds
+  intervals: { eye: number; stretch: number; long: number; water: number }; // minutes
+  lengths: { eye: number; stretch: number; long: number; water: number };   // seconds (water unused)
   skipsPerDay: number;
   snoozesPerDay: number;
   lockOnBreak: boolean;

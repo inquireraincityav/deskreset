@@ -8,33 +8,34 @@
   pointer-events: none;
   z-index: 0;
   overflow: hidden;
-  filter: blur(40px);
+  filter: blur(28px);
 }
 
 .aurora span {
   position: absolute;
   border-radius: 50%;
-  opacity: 0.7;
+  opacity: 1;
   will-change: transform;
+  mix-blend-mode: screen;
 }
 
 .aurora .b1 {
-  width: 55vw; height: 55vw;
-  left: -10%; top: -10%;
-  background: radial-gradient(circle at 50% 50%, #C8B3FF 0%, rgba(200,179,255,0) 70%);
-  animation: aurora-a 28s ease-in-out infinite alternate;
+  width: 65vw; height: 65vw;
+  left: -15%; top: -15%;
+  background: radial-gradient(circle at 50% 50%, #B094FF 0%, rgba(176,148,255,0) 65%);
+  animation: aurora-a 22s ease-in-out infinite alternate;
 }
 .aurora .b2 {
-  width: 50vw; height: 50vw;
-  right: -10%; top: 10%;
-  background: radial-gradient(circle at 50% 50%, #E3C8FF 0%, rgba(227,200,255,0) 70%);
-  animation: aurora-b 34s ease-in-out infinite alternate;
+  width: 60vw; height: 60vw;
+  right: -15%; top: 5%;
+  background: radial-gradient(circle at 50% 50%, #D4A7FF 0%, rgba(212,167,255,0) 65%);
+  animation: aurora-b 28s ease-in-out infinite alternate;
 }
 .aurora .b3 {
-  width: 60vw; height: 60vw;
-  left: 15%; bottom: -25%;
-  background: radial-gradient(circle at 50% 50%, #AFC0FF 0%, rgba(175,192,255,0) 70%);
-  animation: aurora-c 40s ease-in-out infinite alternate;
+  width: 70vw; height: 70vw;
+  left: 10%; bottom: -30%;
+  background: radial-gradient(circle at 50% 50%, #8EA4FF 0%, rgba(142,164,255,0) 65%);
+  animation: aurora-c 34s ease-in-out infinite alternate;
 }
 
 @keyframes aurora-a {

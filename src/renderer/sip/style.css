@@ -12,7 +12,7 @@
 
 html, body {
   margin: 0; padding: 0; height: 100vh;
-  background: #F0E8FF;
+  background: transparent;
   overflow: hidden;
   user-select: none;
 }
@@ -31,8 +31,8 @@ html, body {
   top: 20px; right: 20px;
   width: 32px; height: 32px;
   border-radius: 50%;
-  border: 1px solid rgba(79,47,196,0.2);
-  background: rgba(255, 255, 255, 0.7);
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
   color: var(--ink);
   font-size: 20px;
   font-weight: 500;
@@ -52,8 +52,7 @@ main {
   flex: none;
   border-radius: 28px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 24px 60px rgba(80, 50, 170, 0.18);
 }
 #canvas { width: 440px; height: 400px; display: block; }

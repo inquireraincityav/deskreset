@@ -22,7 +22,8 @@ export class Scheduler extends EventEmitter {
     this.nextAt = {
       eye: now + settings.intervals.eye * 60_000,
       stretch: now + settings.intervals.stretch * 60_000,
-      long: now + settings.intervals.long * 60_000
+      long: now + settings.intervals.long * 60_000,
+      water: now + settings.intervals.water * 60_000
     };
   }
 
@@ -37,6 +38,15 @@ export class Scheduler extends EventEmitter {
   }
 
   updateSettings(s: Settings): void {
+    // When intervals change, re-base the pending breaks so the new
+    // cadence takes effect right away. Any kind whose interval did not
+    // change keeps its existing nextAt.
+    const now = Date.now();
+    for (const k of ['eye', 'stretch', 'long', 'water'] as BreakKind[]) {
+      if (this.settings.intervals[k] !== s.intervals[k]) {
+        this.nextAt[k] = now + s.intervals[k] * 60_000;
+      }
+    }
     this.settings = s;
   }
 
@@ -75,13 +85,17 @@ export class Scheduler extends EventEmitter {
     this.nextAt.eye = now + this.settings.intervals.eye * 60_000;
     this.nextAt.stretch = now + this.settings.intervals.stretch * 60_000;
     this.nextAt.long = now + this.settings.intervals.long * 60_000;
+    this.nextAt.water = now + this.settings.intervals.water * 60_000;
   }
 
   state(): { next: { kind: BreakKind; at: number }; following: { kind: BreakKind; at: number } } {
+    // Water is gentle (just the sip window) — don't surface it as "next
+    // break" in the popover headline unless it's all that's left.
     const entries = (Object.keys(this.nextAt) as BreakKind[])
       .map((k) => ({ kind: k, at: this.nextAt[k] }))
       .sort((a, b) => a.at - b.at);
-    return { next: entries[0], following: entries[1] };
+    const visible = entries.filter((e) => e.kind !== 'water');
+    return { next: visible[0] ?? entries[0], following: visible[1] ?? entries[1] ?? entries[0] };
   }
 
   private withinWorkingHours(now = new Date()): boolean {
@@ -111,15 +125,22 @@ export class Scheduler extends EventEmitter {
       return;
     }
 
-    const { next } = this.state();
-    if (now >= next.at) {
+    // Pick the earliest due break across ALL kinds (including water).
+    const all = (Object.keys(this.nextAt) as BreakKind[])
+      .map((k) => ({ kind: k, at: this.nextAt[k] }))
+      .sort((a, b) => a.at - b.at);
+    const due = all[0];
+    if (now >= due.at) {
       this.suppressed = true;
-      this.emit('fire', next.kind);
-    } else if (next.at - now <= 10_000) {
+      this.emit('fire', due.kind);
+      return;
+    }
+    // Heads-up is only for full-screen breaks, not the gentle water sip.
+    if (due.kind !== 'water' && due.at - now <= 10_000) {
       const already = this.headsupShownFor;
-      if (!already || already.kind !== next.kind || already.at !== next.at) {
-        this.headsupShownFor = { kind: next.kind, at: next.at };
-        this.emit('headsup', next.kind, Math.max(0, Math.ceil((next.at - now) / 1000)));
+      if (!already || already.kind !== due.kind || already.at !== due.at) {
+        this.headsupShownFor = { kind: due.kind, at: due.at };
+        this.emit('headsup', due.kind, Math.max(0, Math.ceil((due.at - now) / 1000)));
       }
     }
   }

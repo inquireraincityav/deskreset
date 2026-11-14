@@ -7,7 +7,6 @@ import { OverlayController } from './overlay';
 import { TrayController } from './tray';
 import { createPopoverWindow } from './popover';
 import { createSipWindow, createSettingsWindow, createHeadsupWindow } from './windows';
-import { BackdropController } from './backdrop';
 import { lockScreen } from './lock';
 import type { BreakKind, PopoverState, Settings } from '../shared/types';
 
@@ -35,10 +34,8 @@ async function main(): Promise<void> {
   let headsupWin: BrowserWindow | null = null;
   let paused = false;
   let pausedUntil: number | null = null;
-  const backdrop = new BackdropController();
 
   function closePopover(): void {
-    backdrop.hide();
     if (popover && !popover.isDestroyed()) popover.hide();
   }
   function openPopover(): void {
@@ -47,7 +44,6 @@ async function main(): Promise<void> {
       popover.on('blur', closePopover);
       popover.on('closed', () => { popover = null; });
     }
-    backdrop.show(closePopover);
     tray.anchor(popover);
     popover.show();
     popover.focus();
@@ -91,6 +87,22 @@ async function main(): Promise<void> {
     if (headsupWin && !headsupWin.isDestroyed()) {
       headsupWin.destroy();
       headsupWin = null;
+    }
+    if (kind === 'water') {
+      // Water is the gentle one — open the sip window instead of a
+      // full-screen overlay. Reschedule when the window closes.
+      if (!sipWin || sipWin.isDestroyed()) {
+        sipWin = createSipWindow();
+        sipWin.on('closed', () => {
+          sipWin = null;
+          scheduler.reschedule('water');
+          pushPopover();
+        });
+      } else {
+        sipWin.show();
+        sipWin.focus();
+      }
+      return;
     }
     const copy = BREAK_COPY[kind];
     const length = store.settings.lengths[kind];
@@ -153,9 +165,16 @@ async function main(): Promise<void> {
     scheduler.fireNow(next.kind);
   });
   ipcMain.handle('popover:pause1h', () => {
-    paused = true;
-    pausedUntil = Date.now() + 60 * 60_000;
-    scheduler.setPaused(true, pausedUntil);
+    // Toggle. If paused, resume immediately; otherwise pause 1 hour.
+    if (paused) {
+      paused = false;
+      pausedUntil = null;
+      scheduler.setPaused(false);
+    } else {
+      paused = true;
+      pausedUntil = Date.now() + 60 * 60_000;
+      scheduler.setPaused(true, pausedUntil);
+    }
     pushPopover();
   });
   ipcMain.handle('popover:openSip', () => {
@@ -242,9 +261,6 @@ async function main(): Promise<void> {
     if (settingsWin && !settingsWin.isDestroyed()) settingsWin.close();
   });
 
-  // Backdrop
-  ipcMain.handle('backdrop:close', () => closePopover());
-
   app.on('window-all-closed', () => {
     // Keep running as a menu-bar app; do nothing.
   });
@@ -262,5 +278,7 @@ const BREAK_COPY: Record<BreakKind, { title: string; body: string }> = {
   long: {
     title: 'Stand up and move',
     body: 'Step away from the screen. Walk a little. Take a sip of water when you come back.'
-  }
+  },
+  // Water doesn't use the overlay; the sip window opens instead.
+  water: { title: 'Take a sip', body: 'A small sip every break adds up.' }
 };

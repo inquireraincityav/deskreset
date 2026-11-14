@@ -2,8 +2,8 @@ import type { Settings, DayCounts } from './types';
 
 export const DEFAULT_SETTINGS: Settings = {
   enforcement: 'firm',
-  intervals: { eye: 20, stretch: 60, long: 120 },
-  lengths: { eye: 20, stretch: 140, long: 300 },
+  intervals: { eye: 20, stretch: 60, long: 120, water: 45 },
+  lengths:   { eye: 20, stretch: 140, long: 300, water: 0 },
   skipsPerDay: 2,
   snoozesPerDay: 3,
   lockOnBreak: false,
@@ -14,8 +14,8 @@ export const DEFAULT_SETTINGS: Settings = {
 export function emptyCounts(date: string): DayCounts {
   return {
     date,
-    breaksTaken: { eye: 0, stretch: 0, long: 0 },
-    breaksSkipped: { eye: 0, stretch: 0, long: 0 },
+    breaksTaken: { eye: 0, stretch: 0, long: 0, water: 0 },
+    breaksSkipped: { eye: 0, stretch: 0, long: 0, water: 0 },
     snoozesUsed: 0,
     sips: 0
   };

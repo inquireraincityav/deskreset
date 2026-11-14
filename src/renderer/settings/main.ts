@@ -31,6 +31,7 @@ function render(): void {
   $('ieye-val').textContent = String(settings.intervals.eye);
   $('istretch-val').textContent = String(settings.intervals.stretch);
   $('ilong-val').textContent = String(settings.intervals.long);
+  $('iwater-val').textContent = String(settings.intervals.water);
   setSwitch('lock-toggle', settings.lockOnBreak);
   setSwitch('launch-toggle', settings.launchAtLogin);
   setSwitch('wh-toggle', settings.workingHours.enabled);
@@ -71,6 +72,8 @@ document.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((b) => {
       save({ intervals: { ...settings.intervals, stretch: Math.max(15, Math.min(240, settings.intervals.stretch + dir)) } });
     } else if (key === 'ilong') {
       save({ intervals: { ...settings.intervals, long: Math.max(30, Math.min(480, settings.intervals.long + dir)) } });
+    } else if (key === 'iwater') {
+      save({ intervals: { ...settings.intervals, water: Math.max(15, Math.min(240, settings.intervals.water + dir)) } });
     }
   });
 });

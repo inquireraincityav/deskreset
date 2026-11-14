@@ -12,7 +12,7 @@ interface DeskPopoverAPI {
 }
 const desk = (window as unknown as { desk: DeskPopoverAPI }).desk;
 
-const KIND_LABEL = { eye: 'Eye break', stretch: 'Stretch break', long: 'Long break' };
+const KIND_LABEL: Record<string, string> = { eye: 'Eye break', stretch: 'Stretch break', long: 'Long break', water: 'Water' };
 
 const $nc = document.getElementById('next-countdown')!;
 const $nk = document.getElementById('next-kind')!;
@@ -43,13 +43,16 @@ function render(): void {
     : `${KIND_LABEL[state.followingBreakKind]} at ${h}:${pad(m)} ${ampm}`;
 
   const c = state.counts;
-  const taken = c.breaksTaken.eye + c.breaksTaken.stretch + c.breaksTaken.long;
-  const skipped = c.breaksSkipped.eye + c.breaksSkipped.stretch + c.breaksSkipped.long;
+  const taken = c.breaksTaken.eye + c.breaksTaken.stretch + c.breaksTaken.long + c.breaksTaken.water;
+  const skipped = c.breaksSkipped.eye + c.breaksSkipped.stretch + c.breaksSkipped.long + c.breaksSkipped.water;
   const perDay = Math.round((8 * 60) / state.settings.intervals.eye);
   $breaksN.textContent = String(taken);
   $breaksGoal.textContent = String(perDay);
   $sipsN.textContent = String(c.sips);
   $skipsN.textContent = String(skipped);
+
+  const $pause = document.getElementById('pause')!;
+  $pause.textContent = state.paused ? 'Resume' : 'Pause 1 hour';
 }
 
 async function init(): Promise<void> {
