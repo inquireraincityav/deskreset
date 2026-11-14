@@ -10,5 +10,6 @@ contextBridge.exposeInMainWorld('desk', {
   pause1h: () => ipcRenderer.invoke('popover:pause1h'),
   updateSettings: (patch: unknown) => ipcRenderer.invoke('popover:updateSettings', patch),
   openSip: () => ipcRenderer.invoke('popover:openSip'),
-  openSettings: () => ipcRenderer.invoke('popover:openSettings')
+  openSettings: () => ipcRenderer.invoke('popover:openSettings'),
+  startStretch: () => ipcRenderer.invoke('popover:startStretch')
 });

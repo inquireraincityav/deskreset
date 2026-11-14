@@ -164,6 +164,9 @@ async function main(): Promise<void> {
     const { next } = scheduler.state();
     scheduler.fireNow(next.kind);
   });
+  ipcMain.handle('popover:startStretch', () => {
+    scheduler.fireNow('stretch');
+  });
   ipcMain.handle('popover:pause1h', () => {
     // Toggle. If paused, resume immediately; otherwise pause 1 hour.
     if (paused) {
