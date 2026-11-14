@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9B7BFF"/>
+      <stop offset="0.55" stop-color="#6B46E5"/>
+      <stop offset="1" stop-color="#4624AF"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2="0" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="512" cy="520" r="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="squircle">
+      <rect x="0" y="0" width="1024" height="1024" rx="225" ry="225"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#squircle)">
+    <rect x="0" y="0" width="1024" height="1024" fill="url(#bg)"/>
+    <rect x="0" y="0" width="1024" height="1024" fill="url(#sheen)"/>
+    <circle cx="512" cy="520" r="420" fill="url(#glow)"/>
+  </g>
+
+  <!-- Eye: upper arc + horizon line. The horizon doubles as both the
+       lower lid and the "look to the horizon" reference. -->
+  <g stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="30">
+    <path d="M 252 612 A 380 380 0 0 1 772 612"/>
+    <line x1="252" y1="612" x2="772" y2="612"/>
+  </g>
+
+  <!-- Pupil: a small filled dot above the horizon. -->
+  <circle cx="512" cy="528" r="60" fill="#ffffff"/>
+
+  <!-- Soft inner-rim for depth. -->
+  <rect x="6" y="6" width="1012" height="1012" rx="221" ry="221" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="2"/>
+</svg>

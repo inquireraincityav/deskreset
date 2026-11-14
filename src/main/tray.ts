@@ -1,32 +1,25 @@
-import { Tray, nativeImage, BrowserWindow, screen, app } from 'electron';
+import { Tray, nativeImage, screen, app, BrowserWindow } from 'electron';
 import { join } from 'node:path';
 
-// Menu-bar / tray icon with a countdown string.
-// The popover is a frameless window shown anchored to the tray icon.
+// Menu-bar / tray icon with a countdown title. The click handler is
+// provided by the caller (so it can drive the popover + backdrop
+// together). Anchoring is still handled here.
 
 export class TrayController {
   private tray: Tray | null = null;
-  private popover: BrowserWindow | null = null;
 
-  init(onOpenPopover: () => BrowserWindow): void {
-    // 1x1 transparent image as a stand-in icon. Replace with a real
-    // template icon in Phase 3 (an eye glyph, template image on macOS so
-    // it adapts to menu-bar light/dark).
-    const img = nativeImage.createEmpty();
+  init(onClick: () => void): void {
+    const iconPath = app.isPackaged
+      ? join(process.resourcesPath, 'trayTemplate.png')
+      : join(__dirname, '../../build/trayTemplate.png');
+    let img = nativeImage.createFromPath(iconPath);
+    if (img.isEmpty()) img = nativeImage.createEmpty();
+    img.setTemplateImage(true);
     this.tray = new Tray(img);
-    this.tray.setTitle('— ');
+    this.tray.setTitle(' — ');
     this.tray.setToolTip('Desk Reset');
-    this.tray.on('click', () => {
-      if (!this.popover || this.popover.isDestroyed()) {
-        this.popover = onOpenPopover();
-        this.anchorPopover();
-      } else if (this.popover.isVisible()) {
-        this.popover.hide();
-      } else {
-        this.anchorPopover();
-        this.popover.show();
-      }
-    });
+    this.tray.on('click', onClick);
+    this.tray.on('right-click', onClick);
   }
 
   setCountdown(minutesUntilNext: number): void {
@@ -34,27 +27,19 @@ export class TrayController {
     const text = minutesUntilNext >= 60
       ? `${Math.floor(minutesUntilNext / 60)}h`
       : `${Math.max(0, Math.round(minutesUntilNext))}m`;
-    this.tray.setTitle(text);
+    this.tray.setTitle(' ' + text);
   }
 
-  private anchorPopover(): void {
-    if (!this.tray || !this.popover) return;
+  anchor(win: BrowserWindow): void {
+    if (!this.tray) return;
     const b = this.tray.getBounds();
-    const [w, h] = this.popover.getSize();
+    const [w, h] = win.getSize();
     const display = screen.getDisplayNearestPoint({ x: b.x, y: b.y });
     const x = Math.min(
       Math.max(display.workArea.x, Math.round(b.x + b.width / 2 - w / 2)),
       display.workArea.x + display.workArea.width - w
     );
     const y = b.y + b.height + 6;
-    this.popover.setPosition(x, y, false);
-  }
-
-  attachPopover(win: BrowserWindow): void {
-    this.popover = win;
-    win.on('blur', () => win.hide());
-    win.on('closed', () => {
-      this.popover = null;
-    });
+    win.setPosition(x, y, false);
   }
 }

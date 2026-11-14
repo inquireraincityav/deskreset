@@ -1,3 +1,4 @@
+export {};
 interface Payload {
   kind: 'eye' | 'stretch' | 'long';
   secondsUntil: number;

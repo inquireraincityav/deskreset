@@ -1,0 +1,8 @@
+<!-- Menu-bar template icon. Black on transparent so macOS auto-tints. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44">
+  <g stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4">
+    <path d="M 9 26 A 14 14 0 0 1 35 26"/>
+    <line x1="9" y1="26" x2="35" y2="26"/>
+  </g>
+  <circle cx="22" cy="22" r="2.6" fill="#000000"/>
+</svg>

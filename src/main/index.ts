@@ -7,6 +7,7 @@ import { OverlayController } from './overlay';
 import { TrayController } from './tray';
 import { createPopoverWindow } from './popover';
 import { createSipWindow, createSettingsWindow, createHeadsupWindow } from './windows';
+import { BackdropController } from './backdrop';
 import { lockScreen } from './lock';
 import type { BreakKind, PopoverState, Settings } from '../shared/types';
 
@@ -34,12 +35,31 @@ async function main(): Promise<void> {
   let headsupWin: BrowserWindow | null = null;
   let paused = false;
   let pausedUntil: number | null = null;
+  const backdrop = new BackdropController();
 
-  tray.init(() => {
-    popover = createPopoverWindow();
-    tray.attachPopover(popover);
-    return popover;
-  });
+  function closePopover(): void {
+    backdrop.hide();
+    if (popover && !popover.isDestroyed()) popover.hide();
+  }
+  function openPopover(): void {
+    if (!popover || popover.isDestroyed()) {
+      popover = createPopoverWindow();
+      popover.on('blur', closePopover);
+      popover.on('closed', () => { popover = null; });
+    }
+    backdrop.show(closePopover);
+    tray.anchor(popover);
+    popover.show();
+    popover.focus();
+  }
+  function togglePopover(): void {
+    if (popover && !popover.isDestroyed() && popover.isVisible()) {
+      closePopover();
+    } else {
+      openPopover();
+    }
+  }
+  tray.init(togglePopover);
 
   const overlay = new OverlayController(store, {
     onComplete: async (k) => {
@@ -221,6 +241,9 @@ async function main(): Promise<void> {
   ipcMain.handle('settings:close', () => {
     if (settingsWin && !settingsWin.isDestroyed()) settingsWin.close();
   });
+
+  // Backdrop
+  ipcMain.handle('backdrop:close', () => closePopover());
 
   app.on('window-all-closed', () => {
     // Keep running as a menu-bar app; do nothing.

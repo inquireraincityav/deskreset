@@ -1,0 +1,17 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden;
+  cursor: default;
+  user-select: none;
+}
+
+#tint {
+  position: fixed;
+  inset: 0;
+  background: rgba(240, 232, 255, 0.55);
+  backdrop-filter: blur(26px) saturate(1.15);
+  -webkit-backdrop-filter: blur(26px) saturate(1.15);
+  z-index: 1;
+}
