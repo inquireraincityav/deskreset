@@ -22,7 +22,7 @@ export function createPopoverWindow(): BrowserWindow {
       sandbox: true
     }
   });
-  win.setAlwaysOnTop(true, 'floating');
+  win.setAlwaysOnTop(true, 'pop-up-menu'); // above the backdrop
 
   if (process.env.ELECTRON_RENDERER_URL) {
     win.loadURL(`${process.env.ELECTRON_RENDERER_URL}/popover/index.html`);

@@ -35,7 +35,7 @@ export class BackdropController {
           sandbox: true
         }
       });
-      win.setAlwaysOnTop(true, 'pop-up-menu'); // below the popover, above apps
+      win.setAlwaysOnTop(true, 'floating'); // above apps, below popover
       win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
 
       if (process.env.ELECTRON_RENDERER_URL) {
