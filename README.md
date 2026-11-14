@@ -62,6 +62,27 @@ Output lands in `release/`:
 
 Either Mac file copies to a USB stick or AirDrops without an installer.
 
+### Giving it to someone else ("damaged" fix)
+
+On the recipient's Mac, anything that arrived via AirDrop or download
+is tagged with a quarantine attribute. Because Desk Reset isn't
+notarized yet, macOS blocks it on first launch with "Desk Reset is
+damaged and can't be opened." Clearing the tag is a one-time step
+per computer:
+
+- **DMG recipients**: open the DMG. Drag the app into Applications,
+  then **double-click `clear-quarantine.command`** that's also in the
+  DMG. One prompt, done.
+- **ZIP recipients**: unzip, drag the `.app` to Applications, open
+  Terminal and run:
+
+```bash
+xattr -cr "/Applications/Desk Reset.app"
+```
+
+After that, Desk Reset opens normally forever. Phase 4 adds Apple
+notarization, which removes this step entirely.
+
 ## Starting the build
 
 Open this repo in Claude Code and say:

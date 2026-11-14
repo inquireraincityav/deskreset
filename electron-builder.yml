@@ -20,21 +20,8 @@ extraResources:
   - from: build/trayTemplate@2x.png
     to: trayTemplate@2x.png
 
-# macOS
-mac:
-  category: public.app-category.healthcare-fitness
-  target:
-    - target: dmg
-      arch: [arm64, x64]
-    - target: zip
-      arch: [arm64, x64]
-  hardenedRuntime: true
-  gatekeeperAssess: false
-  # Signing + notarization is added in Phase 4. Until then the user right-clicks → Open the first time.
-  identity: null
-  extendInfo:
-    LSUIElement: 1 # menu-bar-only app; no Dock icon
-
+# Ship the quarantine-clearing helper inside the DMG next to the app,
+# so a recipient who AirDrops the DMG has the fix at hand.
 dmg:
   title: "Desk Reset ${version}"
   contents:
@@ -44,6 +31,32 @@ dmg:
       y: 180
       type: link
       path: /Applications
+    - x: 270
+      y: 330
+      type: file
+      path: scripts/clear-quarantine.command
+
+# macOS
+mac:
+  category: public.app-category.healthcare-fitness
+  icon: build/icon.png
+  target:
+    - target: dmg
+      arch: [arm64, x64]
+    - target: zip
+      arch: [arm64, x64]
+  # No Apple Developer account yet, so we ad-hoc sign (codesign --sign -).
+  # That satisfies macOS's "arm64 binaries must be signed" rule, so the
+  # app will at least launch. Gatekeeper still flags AirDropped copies
+  # with the quarantine bit — the recipient clears it once with:
+  #   xattr -cr "/Applications/Desk Reset.app"
+  # (or runs scripts/clear-quarantine.command). Real notarization is
+  # Phase 4 when an Apple Developer account is available.
+  hardenedRuntime: false
+  gatekeeperAssess: false
+  identity: "-"           # ad-hoc identity
+  extendInfo:
+    LSUIElement: 1 # menu-bar-only app; no Dock icon
 
 # Windows
 win:

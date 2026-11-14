@@ -1,11 +1,17 @@
 import { exec } from 'node:child_process';
 
-// OS-level lock. On macOS this sleeps the display, which requires the
-// account password to come back. (Full session lock via CGSession needs
-// a bundled helper; sleep is good enough for Phase 1 and documented.)
+// Real session lock. The login window takes over the display and
+// requires the account password to return — the same thing Apple
+// menu → Lock Screen does. The app stays running; its overlay is
+// already open and reappears, with the live countdown, as soon as
+// the user authenticates.
+//
+// macOS does not let any third-party app draw on top of the login
+// window itself, so showing the countdown ON the lock screen is not
+// possible. Showing it the moment the user unlocks is what this does.
 export function lockScreen(): void {
   if (process.platform === 'darwin') {
-    exec('pmset displaysleepnow');
+    exec('/System/Library/CoreServices/"Menu Extras"/User.menu/Contents/Resources/CGSession -suspend');
   } else if (process.platform === 'win32') {
     exec('rundll32.exe user32.dll,LockWorkStation');
   }
